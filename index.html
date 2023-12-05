@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Editor de Imagens</title>
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+
+<body>
+  <div class="editor">
+    <select id="canvasSize" style="width: 100%; max-width: 100%; font-size: 1.2vw;">
+      <option value="1700x1200">1700x1200</option>
+      <option value="1200x1200">1200x1200</option>
+    </select>
+    <p id="alert">&#9888;&#65039; Use Ctrl + Scroll do Mouse para diminuir o zoom da tela! </p>
+    <input type="file" id="imageLoader" style="font-size: 1.2vw;">
+    <canvas id="canvas" width="800" height="600"></canvas>
+  </div>
+
+  <button id="downloadBtn">Download</button>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
+  <script>
+    const canvas = new fabric.Canvas('canvas');
+
+    function setCanvasSize(width, height) {
+      canvas.setWidth(width);
+      canvas.setHeight(height);
+    }
+
+    document.getElementById('canvasSize').addEventListener('change', function (e) {
+      const selectedSize = e.target.value.split('x');
+      const width = parseInt(selectedSize[0]);
+      const height = parseInt(selectedSize[1]);
+
+      setCanvasSize(width, height);
+    });
+
+    document.getElementById('imageLoader').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function (event) {
+        const imgObj = new Image();
+        imgObj.src = event.target.result;
+
+        imgObj.onload = function () {
+          const fabricImage = new fabric.Image(imgObj);
+          fabricImage.scale(0.5);
+          canvas.add(fabricImage);
+        };
+      };
+
+      reader.readAsDataURL(file);
+    });
+
+    canvas.on('mouse:dblclick', function (event) {
+      const activeObject = event.target;
+      if (activeObject && activeObject.type === 'image') {
+        activeObject.scale(1.2).setCoords();
+        canvas.renderAll();
+      }
+    });
+
+    // Evento para remover imagem ao pressionar a tecla "Delete"
+    document.addEventListener('keydown', function (event) {
+      const key = event.key || event.keyCode;
+      if (key === 'Delete' || key === 46) { // Verificando se a tecla pressionada é "Delete"
+        const activeObject = canvas.getActiveObject();
+        if (activeObject && activeObject.type === 'image') {
+          canvas.remove(activeObject);
+          canvas.renderAll();
+        }
+      }
+    });
+    document.getElementById('downloadBtn').addEventListener('click', function () {
+      const selectedSize = document.getElementById('canvasSize').value.split('x');
+      const width = parseInt(selectedSize[0]);
+      const height = parseInt(selectedSize[1]);
+
+      // Salvando as dimensões originais do canvas
+      const originalWidth = canvas.width;
+      const originalHeight = canvas.height;
+
+      // Definindo as dimensões do canvas temporariamente para criar a imagem com o tamanho desejado
+      canvas.setWidth(width);
+      canvas.setHeight(height);
+
+      // Criando um link temporário para fazer o download
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL({
+        format: 'png',
+        multiplier: 1 // Mantendo o tamanho fixo
+      });
+      link.download = 'imagem_canvas.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Restaurando as dimensões originais do canvas
+      canvas.setWidth(originalWidth);
+      canvas.setHeight(originalHeight);
+    });
+  </script>
+</body>
+
+</html>
