@@ -77,10 +77,19 @@ body {
   border-radius: 5px;
   text-align: center;
   font-weight: bold;
-  font-size: 0.9vw;
+  font-size: 1.0vw;
   position: absolute;
   left: 2px;
   bottom: 2px;
+}
+
+#return {
+  width: 3.0vw;
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  color: var(--brand);
+  cursor: pointer;
 }
 
 @keyframes alert {

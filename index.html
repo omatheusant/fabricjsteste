@@ -3,15 +3,20 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Editor de Imagens</title>
-  <link rel="stylesheet" href="styles/styles.css">
+  <title>Gerador de KIT</title>
+  <link rel="stylesheet" href="./styles/styles.css">
+  <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon">
 </head>
 
 <body>
+  <a href="https://ismafer-tools.vercel.app">
+    <img id="return" src="./assets/arrow-left-solid.svg" alt="">
+  </a>
   <div class="editor">
     <select id="canvasSize" style="width: 100%; max-width: 100%; font-size: 1.2vw;">
-      <option value="1700x1200">1700x1200</option>
-      <option value="1200x1200">1200x1200</option>
+      <option disabled selected>Escolha um tamanho</option>
+      <option value="1700x1200">1700x1200 &#40;Mercado Livre&#41;</option>
+      <option value="1200x1200">1200x1200 &#40;Shopee&#41;</option>
     </select>
     <p id="alert">&#9888;&#65039; Use Ctrl + Scroll do Mouse para diminuir o zoom da tela! </p>
     <input type="file" id="imageLoader" style="font-size: 1.2vw;">
