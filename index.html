@@ -81,34 +81,37 @@
       }
     });
     document.getElementById('downloadBtn').addEventListener('click', function () {
-      const selectedSize = document.getElementById('canvasSize').value.split('x');
-      const width = parseInt(selectedSize[0]);
-      const height = parseInt(selectedSize[1]);
+  const selectedSize = document.getElementById('canvasSize').value.split('x');
+  const width = parseInt(selectedSize[0]);
+  const height = parseInt(selectedSize[1]);
 
-      // Salvando as dimensões originais do canvas
-      const originalWidth = canvas.width;
-      const originalHeight = canvas.height;
+  // Salvando as dimensões originais do canvas
+  const originalWidth = canvas.width;
+  const originalHeight = canvas.height;
 
-      // Definindo as dimensões do canvas temporariamente para criar a imagem com o tamanho desejado
-      canvas.setWidth(width);
-      canvas.setHeight(height);
+  // Definindo as dimensões do canvas temporariamente para criar a imagem com o tamanho desejado
+  canvas.setWidth(width);
+  canvas.setHeight(height);
 
-      // Criando um link temporário para fazer o download
-      const link = document.createElement('a');
-      link.href = canvas.toDataURL({
-        format: 'png',
-        multiplier: 1 // Mantendo o tamanho fixo
-      });
-      link.download = 'imagem_canvas.png';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+  // Definindo o fundo branco no canvas
+  canvas.backgroundColor = 'white'; // Definindo a cor de fundo como branco
 
-      // Restaurando as dimensões originais do canvas
-      canvas.setWidth(originalWidth);
-      canvas.setHeight(originalHeight);
-    });
+  // Criando um link temporário para fazer o download
+  const link = document.createElement('a');
+  link.href = canvas.toDataURL({
+    format: 'png',
+    multiplier: 1 // Mantendo o tamanho fixo
+  });
+  link.download = 'imagem_canvas.png';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  // Restaurando as dimensões originais do canvas e removendo a cor de fundo
+  canvas.backgroundColor = ''; // Removendo a cor de fundo
+  canvas.setWidth(originalWidth);
+  canvas.setHeight(originalHeight);
+});
   </script>
 </body>
-
 </html>
