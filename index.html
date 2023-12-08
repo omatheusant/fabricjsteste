@@ -9,118 +9,50 @@
 </head>
 
 <body>
-  <a href="https://ismafer-tools.vercel.app">
-    <img id="return" src="./assets/arrow-left-solid.svg" alt="">
-  </a>
-  <div class="editor">
-    <select id="canvasSize" style="width: 100%; max-width: 100%; font-size: 1.2vw;">
-      <option disabled selected>Escolha um tamanho</option>
-      <option value="1700x1200">1700x1200 &#40;Mercado Livre&#41;</option>
-      <option value="1200x1200">1200x1200 &#40;Shopee&#41;</option>
-    </select>
-    <div id="alert2">
-      <h4>Atalhos</h4>
-      <div>
-        <span><strong>DELETE:</strong> Exclui a imagem selecionada.</span>
-        <span><strong>Duplo Click:</strong> Trás a imagem para a camada superior.</span>
+  <main class="container">
+    <header class="header">
+      <a class="return" href="https://ismafer-tools.vercel.app">
+        <img src="./assets/arrow-left-solid.svg" alt="">
+      </a>
+
+      <div class="editor">
+        <select class="sizeMenu" id="canvasSize">
+          <option disabled selected>Tamanho</option>
+          <option value="1700x1200">1700x1200 &#40;Mercado Livre&#41;</option>
+          <option value="1200x1200">1200x1200 &#40;Shopee&#41;</option>
+        </select>
+        <label id="uploadImage" for="imageLoader">Adicionar Imagem</label>
+        <input type="file" name="imageLoader" id="imageLoader" style="font-size: 1.2vw;">
+        <button id="downloadBtn">Download</button>
+      </div>
+    </header>
+
+    <div class="card">
+      <h2>Atalhos</h2>
+      <div class="cardItems">
+        <span><strong>DELETE:</strong> Remove a imagem selecionada.</span>
+        <span><strong>Duplo Click:</strong> Trás a imagem clicada para a camada superior (a frente).</span>
       </div>
     </div>
-
+    <div class="canvasContainer">
+      <canvas id="canvas" width="1700" height="1200"></canvas>
+    </div>
     <p id="alert">&#9888;&#65039; Use Ctrl + Scroll do Mouse para diminuir o zoom da tela! </p>
-    <input type="file" id="imageLoader" style="font-size: 1.2vw;">
-    <canvas id="canvas" width="800" height="600"></canvas>
-    </p>
-
-    <button id="downloadBtn">Download</button>
+  </main>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
-    <script>
-      const canvas = new fabric.Canvas('canvas');
-
-      function setCanvasSize(width, height) {
-        canvas.setWidth(width);
-        canvas.setHeight(height);
-      }
-
-      document.getElementById('canvasSize').addEventListener('change', function (e) {
-        const selectedSize = e.target.value.split('x');
-        const width = parseInt(selectedSize[0]);
-        const height = parseInt(selectedSize[1]);
-
-        setCanvasSize(width, height);
-      });
-
-      let layerIndex = 0; // Variável para controlar as camadas das imagens
-
-      document.getElementById('imageLoader').addEventListener('change', function (e) {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-
-        reader.onload = function (event) {
-          const imgObj = new Image();
-          imgObj.src = event.target.result;
-
-          imgObj.onload = function () {
-            const fabricImage = new fabric.Image(imgObj);
-            fabricImage.scale(0.5);
-            fabricImage.set({
-              layer: layerIndex++ // Define a camada da imagem
-            });
-            canvas.add(fabricImage);
-          };
-        };
-
-        reader.readAsDataURL(file);
-      });
-
-      canvas.on('mouse:dblclick', function (event) {
-        const activeObject = event.target;
-        if (activeObject && activeObject.type === 'image') {
-          activeObject.moveTo(++layerIndex); // Move a imagem para a camada mais alta
-          canvas.renderAll();
-        }
-      });
-
-      // Evento para remover imagem ao pressionar a tecla "Delete"
-      document.addEventListener('keydown', function (event) {
-        const key = event.key || event.keyCode;
-        if (key === 'Delete' || key === 46) {
-          const activeObject = canvas.getActiveObject();
-          if (activeObject && activeObject.type === 'image') {
-            canvas.remove(activeObject);
-            canvas.renderAll();
-          }
-        }
-      });
-
-      document.getElementById('downloadBtn').addEventListener('click', function () {
-        const selectedSize = document.getElementById('canvasSize').value.split('x');
-        const width = parseInt(selectedSize[0]);
-        const height = parseInt(selectedSize[1]);
-
-        const originalWidth = canvas.width;
-        const originalHeight = canvas.height;
-
-        canvas.setWidth(width);
-        canvas.setHeight(height);
-        canvas.backgroundColor = 'white';
-
-        const link = document.createElement('a');
-        link.href = canvas.toDataURL({
-          format: 'png',
-          multiplier: 1
-        });
-        link.download = 'imagem_canvas.png';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        canvas.backgroundColor = '';
-        canvas.setWidth(originalWidth);
-        canvas.setHeight(originalHeight);
-      });
-    </script>
+    <script type="module" src="./index.js"></script>
 </body>
-
 </html>
+
+<!--  
+<div id="alert2">
+  <h4>Atalhos</h4>
+  <div>
+    <span><strong>DELETE:</strong> Exclui a imagem selecionada.</span>
+    <span><strong>Duplo Click:</strong> Trás a imagem para a camada superior.</span>
+  </div>
+</div>
+
+ -->
