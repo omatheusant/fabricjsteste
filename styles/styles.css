@@ -6,6 +6,10 @@
   --light: #E9FAE3;
 }
 
+ul, li {
+  list-style-type: none;
+}
+
 body {
   margin: 0;
   display: flex;
@@ -81,6 +85,25 @@ body {
   position: absolute;
   left: 2px;
   bottom: 2px;
+}
+
+#alert2 {
+  padding: 10px;
+  width: 20vw;
+  border-radius: 5px;
+  text-align: left;
+  font-size: 1.0vw;
+  position: absolute;
+  top: 40vh;
+  left: 2px;
+  background-color: var(--dark);
+  border-radius: 8px;
+}
+
+#alert2 div {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 #return {
